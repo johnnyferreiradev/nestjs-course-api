@@ -7,6 +7,6 @@ export const ormConfig: DataSourceOptions = {
   username: 'root',
   password: '123456',
   database: 'nestjs_courses',
-  entities: ["dist/**/*.model.js"],
+  entities: ['dist/**/*.entity.js'],
   synchronize: true,
 };

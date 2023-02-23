@@ -1,25 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CourseModel } from './courses.model';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { Course } from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
   constructor(
-    @InjectRepository(CourseModel) private repository: Repository<CourseModel>,
+    @InjectRepository(Course) private repository: Repository<Course>,
   ) {}
 
-  async create(createCourseDto: CreateCourseDto): Promise<CourseModel> {
+  async create(createCourseDto: CreateCourseDto): Promise<Course> {
     return await this.repository.save(createCourseDto);
   }
 
-  async findAll(): Promise<CourseModel[]> {
+  async findAll(): Promise<Course[]> {
     return await this.repository.find();
   }
 
-  async findOne(id: number): Promise<CourseModel> {
+  async findOne(id: number): Promise<Course> {
     const course = await this.repository.findOne({
       where: {
         id,
@@ -36,7 +36,7 @@ export class CoursesService {
   async update(
     id: number,
     updateCourseDto: UpdateCourseDto,
-  ): Promise<CourseModel> {
+  ): Promise<Course> {
     const course = await this.repository.findOne({
       where: {
         id,
