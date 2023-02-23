@@ -3,21 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoursesModule } from './course/courses/courses.module';
+import { ormConfig } from 'orm.config';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '123456',
-      database: 'nestjs_courses',
-      entities: [],
-      synchronize: true,
-    }),
-    CoursesModule,
-  ],
+  imports: [TypeOrmModule.forRoot(ormConfig), CoursesModule],
   controllers: [AppController],
   providers: [AppService],
 })
