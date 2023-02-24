@@ -1,4 +1,5 @@
-import { IsString, IsNumber, MaxLength, Min } from "class-validator";
+import { IsString, IsNumber, MaxLength, Min } from 'class-validator';
+
 export class CreateCourseDto {
   @IsString()
   @MaxLength(100)

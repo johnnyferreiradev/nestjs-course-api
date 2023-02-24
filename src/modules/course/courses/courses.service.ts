@@ -1,26 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { PrismaService } from 'src/database/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
-  constructor(
-    @InjectRepository(Course) private repository: Repository<Course>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(createCourseDto: CreateCourseDto): Promise<Course> {
-    return await this.repository.save(createCourseDto);
+    return await this.prisma.course.create({
+      data: createCourseDto,
+    });
   }
 
   async findAll(): Promise<Course[]> {
-    return await this.repository.find();
+    return await this.prisma.course.findMany();
   }
 
   async findOne(id: number): Promise<Course> {
-    const course = await this.repository.findOne({
+    const course = await this.prisma.course.findUnique({
       where: {
         id,
       },
@@ -33,11 +32,8 @@ export class CoursesService {
     return course;
   }
 
-  async update(
-    id: number,
-    updateCourseDto: UpdateCourseDto,
-  ): Promise<Course> {
-    const course = await this.repository.findOne({
+  async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
+    const course = await this.prisma.course.findUnique({
       where: {
         id,
       },
@@ -47,9 +43,14 @@ export class CoursesService {
       throw new NotFoundException(`No courses found with id ${id}`);
     }
 
-    await this.repository.update({ id }, updateCourseDto);
+    await this.prisma.course.update({
+      where: {
+        id,
+      },
+      data: updateCourseDto,
+    });
 
-    return await this.repository.findOne({
+    return await this.prisma.course.findUnique({
       where: {
         id,
       },
@@ -57,7 +58,7 @@ export class CoursesService {
   }
 
   async remove(id: number): Promise<string> {
-    const course = await this.repository.findOne({
+    const course = await this.prisma.course.findUnique({
       where: {
         id,
       },
@@ -67,7 +68,11 @@ export class CoursesService {
       throw new NotFoundException(`No courses found with id ${id}`);
     }
 
-    await this.repository.delete(id);
+    await this.prisma.course.delete({
+      where: {
+        id,
+      },
+    });
 
     return `The course with id ${id} has been deleted`;
   }
