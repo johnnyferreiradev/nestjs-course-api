@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
+import { createPaginator, PaginatedResult } from 'src/helpers/pagination';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from './entities/course.entity';
@@ -14,8 +15,19 @@ export class CoursesService {
     });
   }
 
-  async findAll(): Promise<Course[]> {
-    return await this.prisma.course.findMany();
+  async findAll(query: {
+    search: string;
+    page: string;
+  }): Promise<PaginatedResult<Course>> {
+    const { search, page = 1 } = query;
+    const paginate = createPaginator({ take: 5, page });
+    return await paginate(this.prisma.course, {
+      where: {
+        name: {
+          contains: search,
+        },
+      },
+    });
   }
 
   async findOne(id: number): Promise<Course> {
