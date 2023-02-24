@@ -18,6 +18,6 @@ export class TransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
-    return next.handle().pipe(map((data) => ({ data })));
+    return next.handle().pipe(map((data) => data));
   }
 }
