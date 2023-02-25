@@ -44,9 +44,9 @@ export class UsersService {
     });
   }
 
-  // findAll() {
-  //   return `This action returns all users`;
-  // }
+  findAll() {
+    return `This action returns all users`;
+  }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
